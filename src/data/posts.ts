@@ -9,17 +9,17 @@ export type Post = {
 
 export const posts: Post[] = [
   {
-    slug: "primo-articolo",
-    title: "Primo articolo del blog",
-    excerpt: "Una breve descrizione dell'articolo.",
-    content: "Contenuto completo dell'articolo...",
+    slug: "first-post",
+    title: "First blog post",
+    excerpt: "A short description of the post.",
+    content: "Full post content...",
     date: "2025-11-01",
   },
   {
-    slug: "secondo-articolo",
-    title: "Secondo articolo del blog",
-    excerpt: "Descrizione del secondo articolo.",
-    content: "Altro contenuto interessante...",
+    slug: "second-post",
+    title: "Second blog post",
+    excerpt: "Description of the second post.",
+    content: "More interesting content...",
     date: "2025-11-10",
   },
 ];

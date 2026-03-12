@@ -27,7 +27,7 @@ const POST_QUERY = groq`
 function formatDate(iso?: string) {
   if (!iso) return ""
   const d = new Date(iso)
-  return new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "long", year: "numeric" }).format(d)
+  return new Intl.DateTimeFormat("en-US", { day: "2-digit", month: "long", year: "numeric" }).format(d)
 }
 
 const portableTextComponents: PortableTextComponents = {
@@ -39,7 +39,7 @@ const portableTextComponents: PortableTextComponents = {
           <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
             <Image
               src={src}
-              alt={value?.alt || "Immagine"}
+              alt={value?.alt || "Image"}
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 900px"
@@ -107,7 +107,7 @@ export default async function PostPage(props: {
       {/* Breadcrumb */}
       <div className="mb-6">
         <Link href="/blog" className="text-sm text-neutral-600 hover:text-neutral-900">
-          ← Torna al blog
+          ← Back to blog
         </Link>
       </div>
 

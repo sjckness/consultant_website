@@ -1,0 +1,20 @@
+<svg width="900" height="900" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar placeholder">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="900" rx="180" fill="#0b172a"/>
+  <circle cx="450" cy="320" r="160" fill="url(#g1)"/>
+  <ellipse cx="450" cy="650" rx="230" ry="150" fill="url(#g2)"/>
+  <circle cx="360" cy="300" r="24" fill="#0b172a" opacity="0.4"/>
+  <circle cx="540" cy="300" r="24" fill="#0b172a" opacity="0.4"/>
+  <path d="M360 380c24 30 56 46 90 46s66-16 90-46" stroke="#0b172a" stroke-width="22" stroke-linecap="round" opacity="0.35"/>
+  <path d="M295 640c42-90 268-90 310 0" stroke="#0b172a" stroke-width="30" stroke-linecap="round" opacity="0.28"/>
+</svg>
