@@ -6,56 +6,64 @@ type Lang = "en" | "de";
 
 const translations = {
   en: {
+    brand: "Steffens Infraport Consulting",
+    brandShort: "Steffens Infraport",
     navHome: "Home",
     navAbout: "About",
     navServices: "Services",
-    navExperience: "Experience",
-    navFor: "For whom",
+    navExperience: "References",
+    navFor: "Industries",
     navBlog: "Blog",
     navContact: "Contact",
     bookCall: "Book a call",
     contact: "Contact",
     navMenuOpen: "Open menu",
     navMenuClose: "Close menu",
-    heroBadge: "Professional service",
-    heroTitle: "Operational strategy to move your team forward",
+    heroBadge: "Infrastructure consulting",
+    heroTitle: "Infrastructure in focus. Portfolios under control. Projects delivered.",
     heroSubtitle:
-      "A light but incisive partnership: clear decisions, shared priorities, delivery that doesn’t stop.",
-    ctaSecondary: "See the method",
+      "I support owners, infrastructure operators and public clients in the strategic planning, steering and delivery of demanding infrastructure projects and construction portfolios — with a particular focus on rail infrastructure and multi-disciplinary undertakings.",
+    heroCtaPrimary: "Get in touch",
+    heroCtaSecondary: "Discover services",
+    heroFocus: "Today's focus:",
     servicesBadge: "Services",
-    servicesTitle: "Done-with-you support that brings decisions and delivery.",
+    servicesTitle: "Experience, structure and leadership for complex infrastructure portfolios.",
     servicesSubtitle:
-      "Pick the right format: a sprint for clarity, a roadmap to guide execution, or recurring support to keep momentum.",
+      "Six advisory areas — from portfolio governance to project rescue — built on more than 20 years in rail and civil engineering.",
     blogBadge: "Blog",
-    blogTitle: "Ideas, work notes and practical cases.",
+    blogTitle: "Notes from the field: rail, portfolio and project leadership.",
     blogSubtitle:
-      "Short, concrete posts: strategy, organisation, decision design, tools and methods I use daily.",
+      "Short, practice-driven posts on infrastructure delivery, BIM, sustainability and stakeholder management.",
   },
   de: {
+    brand: "Steffens Infraport Consulting",
+    brandShort: "Steffens Infraport",
     navHome: "Start",
     navAbout: "Über mich",
     navServices: "Leistungen",
     navExperience: "Referenzen",
-    navFor: "Für wen",
+    navFor: "Branchen & Zielgruppen",
     navBlog: "Blog",
     navContact: "Kontakt",
-    bookCall: "Termin buchen",
+    bookCall: "Kontakt aufnehmen",
     contact: "Kontakt",
     navMenuOpen: "Menü öffnen",
     navMenuClose: "Menü schließen",
-    heroBadge: "Professioneller Service",
-    heroTitle: "Operative Strategie, die dein Team voranbringt",
+    heroBadge: "Infrastrukturberatung",
+    heroTitle: "Infrastruktur im Blick. Portfolio führen. Projekte erfolgreich umsetzen.",
     heroSubtitle:
-      "Partnerschaftlich, klar und leichtgewichtig: schnelle Entscheidungen, gemeinsame Prioritäten, Delivery ohne Stopps.",
-    ctaSecondary: "Methode ansehen",
+      "Ich unterstütze Bauherren, Infrastrukturbetreiber und öffentliche Auftraggeber bei der strategischen Planung, Steuerung und Umsetzung anspruchsvoller Infrastrukturprojekte und Bauportfolien – mit besonderem Fokus auf Bahninfrastruktur und multidisziplinäre Vorhaben.",
+    heroCtaPrimary: "Kontakt aufnehmen",
+    heroCtaSecondary: "Leistungen entdecken",
+    heroFocus: "Heutiger Fokus:",
     servicesBadge: "Leistungen",
-    servicesTitle: "Begleitung, die Entscheidungen und Umsetzung voranbringt.",
+    servicesTitle: "Erfahrung, Struktur und Führung für komplexe Infrastrukturportfolios.",
     servicesSubtitle:
-      "Wähle das passende Format: Sprint für Klarheit, Roadmap für Umsetzung, oder laufende Begleitung für Tempo.",
+      "Sechs Beratungsfelder – von der Portfoliosteuerung bis zur Projektsanierung – fundiert durch mehr als 20 Jahre Erfahrung im Bahn- und Bauingenieurwesen.",
     blogBadge: "Blog",
-    blogTitle: "Ideen, Work Notes und Praxis-Cases.",
+    blogTitle: "Notizen aus der Praxis: Bahn, Portfolio und Projektführung.",
     blogSubtitle:
-      "Kurze, konkrete Beiträge: Strategie, Organisation, Decision Design, Tools und Methoden aus meinem Alltag.",
+      "Kurze, praxisnahe Beiträge zu Infrastrukturumsetzung, BIM, Nachhaltigkeit und Stakeholdermanagement.",
   },
 };
 
@@ -65,12 +73,12 @@ const LanguageContext = createContext<{
   lang: Lang;
   setLang: (lang: Lang) => void;
 }>({
-  lang: "en",
+  lang: "de",
   setLang: () => {},
 });
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<Lang>("de");
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? localStorage.getItem("langPref") : null;

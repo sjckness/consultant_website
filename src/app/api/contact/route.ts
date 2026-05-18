@@ -7,7 +7,7 @@ const ContactSchema = z.object({
   name: z.string().min(2).max(80),
   email: z.string().email().max(120),
   message: z.string().min(10).max(5000),
-  // honeypot anti-bot (deve essere vuoto)
+  // honeypot anti-bot (must be empty)
   website: z.string().max(0).optional().or(z.literal("")),
 });
 
@@ -18,31 +18,28 @@ export async function POST(req: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { ok: false, error: "Dati non validi." },
+        { ok: false, error: "Invalid data." },
         { status: 400 }
       );
     }
 
-    // Anti-bot: honeypot compilato => scarta
+    // Anti-bot: honeypot filled => discard silently
     if (parsed.data.website && parsed.data.website.length > 0) {
-      return NextResponse.json({ ok: true }); // rispondi "ok" per non far capire ai bot
+      return NextResponse.json({ ok: true });
     }
 
     const name = parsed.data.name.trim();
     const email = parsed.data.email.trim().toLowerCase();
     const message = parsed.data.message.trim();
 
-    // Info utili
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
     const userAgent = req.headers.get("user-agent") ?? null;
 
-    // 1) Salva su DB
     const saved = await prisma.contactRequest.create({
       data: { name, email, message, ip, userAgent },
     });
 
-    // 2) Invia email
     const transport = makeTransport();
     const to = process.env.CONTACT_TO_EMAIL!;
     const from = process.env.CONTACT_FROM_EMAIL || process.env.SMTP_USER!;
@@ -51,22 +48,22 @@ export async function POST(req: Request) {
       from,
       to,
       replyTo: email,
-      subject: `Nuova richiesta dal sito: ${name}`,
+      subject: `New website enquiry: ${name}`,
       text:
-        `Hai ricevuto una nuova richiesta.\n\n` +
-        `Nome: ${name}\n` +
+        `You have received a new enquiry.\n\n` +
+        `Name: ${name}\n` +
         `Email: ${email}\n` +
         `IP: ${ip ?? "-"}\n` +
         `User-Agent: ${userAgent ?? "-"}\n\n` +
-        `Messaggio:\n${message}\n\n` +
-        `ID richiesta: ${saved.id}\n`,
+        `Message:\n${message}\n\n` +
+        `Request ID: ${saved.id}\n`,
     });
 
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { ok: false, error: "Errore server." },
+      { ok: false, error: "Server error." },
       { status: 500 }
     );
   }

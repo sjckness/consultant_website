@@ -1,9 +1,83 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Clock, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Clock,
+  CheckCircle2,
+  Linkedin,
+  Phone,
+  Calendar,
+} from "lucide-react";
+import Reveal from "@/components/Reveal";
+import { useLanguage } from "@/lib/i18n";
+
+const copy = {
+  en: {
+    badge: "Contact",
+    title: "Let's talk about your portfolio.",
+    subtitle:
+      "Share your context, timeline and any constraints. You'll get a quick read on how I can help — and the first decisions to take.",
+    responseTitle: "Response time",
+    responseValue: "Within 24 hours (Mon–Fri)",
+    bestTitle: "Best way",
+    bestValue: "Email with a short context",
+    callTitle: "Book a call",
+    callValue: "30 min, video or phone",
+    placeholders: {
+      name: "Your name",
+      email: "Work email",
+      message: "Tell me about the project, goals, scope and timeline",
+    },
+    formTitle: "Send a message",
+    formSub: "Reach me directly — I read every message.",
+    submit: "Send message",
+    submitting: "Sending…",
+    success: "Message sent — I'll reply as soon as possible.",
+    privacy:
+      "No spam. Your details are used only to reply to this request.",
+    linkedin: "LinkedIn",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
+    directTitle: "Direct channels",
+  },
+  de: {
+    badge: "Kontakt",
+    title: "Sprechen wir über Ihr Portfolio.",
+    subtitle:
+      "Teilen Sie mir Kontext, Zeitachse und allfällige Constraints mit. Sie erhalten eine kurze Einschätzung – und die ersten zu treffenden Entscheidungen.",
+    responseTitle: "Antwortzeit",
+    responseValue: "Innerhalb 24 Stunden (Mo–Fr)",
+    bestTitle: "Bevorzugter Weg",
+    bestValue: "E-Mail mit kurzem Kontext",
+    callTitle: "Termin buchen",
+    callValue: "30 Min., Video oder Telefon",
+    placeholders: {
+      name: "Ihr Name",
+      email: "Geschäftliche E-Mail",
+      message: "Beschreiben Sie Projekt, Ziele, Umfang und Zeitachse",
+    },
+    formTitle: "Nachricht senden",
+    formSub: "Direkt an mich – ich lese jede Anfrage.",
+    submit: "Nachricht senden",
+    submitting: "Wird gesendet…",
+    success: "Nachricht gesendet – ich melde mich so rasch wie möglich.",
+    privacy:
+      "Kein Spam. Ihre Angaben werden ausschliesslich für die Beantwortung dieser Anfrage verwendet.",
+    linkedin: "LinkedIn",
+    phoneLabel: "Telefon",
+    emailLabel: "E-Mail",
+    directTitle: "Direkter Draht",
+  },
+};
+
+const CONTACT_EMAIL = "kontakt@steffensinfraport.ch";
+const CONTACT_PHONE = "+41 00 000 00 00";
+const LINKEDIN_URL = "https://www.linkedin.com/in/gustavo-steffens-47059324";
 
 export default function ContactPage() {
+  const { lang } = useLanguage();
+  const t = copy[lang] ?? copy.de;
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -25,107 +99,215 @@ export default function ContactPage() {
     if (!res.ok) {
       setFeedback(data.error || "Error while sending.");
     } else {
-      setFeedback("Message sent, I'll reply as soon as possible!");
+      setFeedback(t.success);
       setForm({ name: "", email: "", message: "" });
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    background: "var(--bg-deep)",
+    border: "1px solid var(--rule)",
+    color: "var(--ink)",
+  };
+
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12">
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50 via-white to-slate-100 shadow-sm">
-        <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-blue-100 blur-3xl opacity-60" />
-        <div className="absolute -left-20 bottom-0 h-48 w-48 rounded-full bg-indigo-100 blur-3xl opacity-60" />
-
-        <div className="relative grid gap-10 lg:grid-cols-2 p-8 lg:p-12">
-          {/* Intro */}
-          <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-neutral-600 border border-neutral-200">
-              Contact
-            </div>
-            <h1 className="text-4xl font-semibold tracking-tight text-neutral-900">
-              Let’s talk about your next move
+    <>
+      {/* HERO */}
+      <section className="cinematic-glow relative overflow-hidden pt-20 pb-12 md:pt-28 md:pb-16">
+        <div className="page-container relative z-10">
+          <Reveal>
+            <span className="kicker">{t.badge}</span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1
+              className="mt-6 display-serif"
+              style={{
+                color: "var(--ink)",
+                fontSize: "clamp(2.15rem, 4.15vw, 4.15rem)",
+                maxWidth: "22ch",
+              }}
+            >
+              {t.title}
             </h1>
-            <p className="max-w-xl text-lg leading-7 text-neutral-600">
-              Share your goal, timeline, and any constraints. I’ll reply with a quick read on how we can create momentum together.
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="mt-10 lead-xl" style={{ maxWidth: "70ch" }}>
+              {t.subtitle}
             </p>
+          </Reveal>
+        </div>
+      </section>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="flex items-center gap-3 rounded-2xl border border-neutral-200 bg-white/80 p-3 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/10 text-blue-700">
-                  <Clock size={18} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-neutral-900">Response time</p>
-                  <p className="text-sm text-neutral-600">Within 24 hours (Mon–Fri)</p>
-                </div>
+      {/* CONTENT */}
+      <section className="page-container pb-32">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* LEFT — facts + channels */}
+          <div className="space-y-10 lg:col-span-5">
+            <Reveal>
+              <div
+                className="grid gap-px overflow-hidden rounded-2xl"
+                style={{ background: "var(--rule)", border: "1px solid var(--rule)" }}
+              >
+                {[
+                  { icon: Clock, title: t.responseTitle, value: t.responseValue },
+                  { icon: CheckCircle2, title: t.bestTitle, value: t.bestValue },
+                  { icon: Calendar, title: t.callTitle, value: t.callValue },
+                ].map(({ icon: Icon, title, value }) => (
+                  <div
+                    key={title}
+                    className="flex items-center gap-5 p-7"
+                    style={{ background: "var(--bg-elevated)" }}
+                  >
+                    <div
+                      className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg"
+                      style={{
+                        background: "var(--accent-soft)",
+                        color: "var(--accent-strong)",
+                      }}
+                    >
+                      <Icon size={20} />
+                    </div>
+                    <div>
+                      <p
+                        className="text-[11px] uppercase tracking-[0.22em]"
+                        style={{ color: "var(--ink-muted)" }}
+                      >
+                        {title}
+                      </p>
+                      <p
+                        className="mt-1.5 text-[15.5px] font-medium"
+                        style={{ color: "var(--ink)" }}
+                      >
+                        {value}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-3 rounded-2xl border border-neutral-200 bg-white/80 p-3 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600/10 text-emerald-700">
-                  <CheckCircle2 size={18} />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-neutral-900">Best way</p>
-                  <p className="text-sm text-neutral-600">Email with quick context</p>
-                </div>
-              </div>
-            </div>
+            </Reveal>
 
-            <div className="flex items-center gap-2 text-sm text-neutral-700">
-              <Mail size={16} />
-              <span>hello@websitename.com</span>
-            </div>
+            <Reveal delay={80}>
+              <div>
+                <p className="kicker">{t.directTitle}</p>
+                <ul className="mt-7 space-y-4">
+                  <li>
+                    <a
+                      href={`mailto:${CONTACT_EMAIL}`}
+                      className="inline-flex items-center gap-3 text-[16px]"
+                      style={{ color: "var(--ink-soft)" }}
+                    >
+                      <Mail size={17} style={{ color: "var(--accent)" }} />
+                      {CONTACT_EMAIL}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`}
+                      className="inline-flex items-center gap-3 text-[16px]"
+                      style={{ color: "var(--ink-soft)" }}
+                    >
+                      <Phone size={17} style={{ color: "var(--accent)" }} />
+                      {CONTACT_PHONE}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href={LINKEDIN_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 text-[16px]"
+                      style={{ color: "var(--ink-soft)" }}
+                    >
+                      <Linkedin size={17} style={{ color: "var(--accent)" }} />
+                      {t.linkedin}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
           </div>
 
-          {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4 rounded-2xl border border-neutral-200 bg-white/80 p-6 shadow-lg backdrop-blur"
-          >
-            <div className="grid gap-3 sm:grid-cols-2">
-              <input
-                type="text"
-                placeholder="Your name"
-                className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-500 focus:outline-none"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-              />
-              <input
-                type="email"
-                placeholder="Work email"
-                className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-500 focus:outline-none"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
-              />
-            </div>
-            <textarea
-              placeholder="Tell me about your project, goals, and timeline"
-              className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-500 focus:outline-none min-h-[140px]"
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              required
-            />
-
-            {feedback && (
-              <p className="text-sm text-center text-blue-700">{feedback}</p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full rounded-full px-4 py-3 text-sm font-semibold text-white transition ${
-                loading ? "bg-blue-300" : "bg-blue-600 hover:bg-blue-700"
-              }`}
+          {/* RIGHT — form */}
+          <Reveal delay={120} className="lg:col-span-7">
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-3xl p-10 md:p-12"
+              style={{
+                border: "1px solid var(--rule-strong)",
+                background: "var(--bg-elevated)",
+                boxShadow: "0 30px 80px rgba(0,0,0,0.4)",
+              }}
             >
-              {loading ? "Sending..." : "Send message"}
-            </button>
-            <p className="text-xs text-neutral-500 text-center">
-              No spam. I only use your details to reply to this inquiry.
-            </p>
-          </form>
+              <span className="kicker">{t.formTitle}</span>
+              <p
+                className="mt-5"
+                style={{
+                  color: "var(--ink-muted)",
+                  fontSize: "15px",
+                  lineHeight: 1.65,
+                }}
+              >
+                {t.formSub}
+              </p>
+
+              <div className="mt-10 grid gap-5 sm:grid-cols-2">
+                <input
+                  type="text"
+                  placeholder={t.placeholders.name}
+                  className="w-full rounded-lg px-5 py-4 text-[15px] placeholder:text-[var(--ink-faint)] focus:outline-none focus:border-[var(--accent)]"
+                  style={inputStyle}
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder={t.placeholders.email}
+                  className="w-full rounded-lg px-5 py-4 text-[15px] placeholder:text-[var(--ink-faint)] focus:outline-none focus:border-[var(--accent)]"
+                  style={inputStyle}
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  required
+                />
+              </div>
+              <textarea
+                placeholder={t.placeholders.message}
+                className="mt-5 min-h-[220px] w-full rounded-lg px-5 py-4 text-[15px] placeholder:text-[var(--ink-faint)] focus:outline-none focus:border-[var(--accent)]"
+                style={inputStyle}
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+                required
+              />
+
+              {feedback ? (
+                <p
+                  className="mt-5 text-sm"
+                  style={{ color: "var(--accent-strong)" }}
+                >
+                  {feedback}
+                </p>
+              ) : null}
+
+              <div className="mt-10 flex flex-wrap items-center gap-5">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary disabled:opacity-60"
+                >
+                  {loading ? t.submitting : t.submit}{" "}
+                  <span aria-hidden>→</span>
+                </button>
+                <p
+                  className="text-[13px]"
+                  style={{ color: "var(--ink-muted)", maxWidth: "44ch" }}
+                >
+                  {t.privacy}
+                </p>
+              </div>
+            </form>
+          </Reveal>
         </div>
-      </div>
-    </main>
+      </section>
+    </>
   );
 }

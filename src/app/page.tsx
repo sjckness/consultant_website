@@ -1,177 +1,273 @@
 "use client";
 
 import ClaimRotator from "@/components/ClaimRotator";
+import HomeCarousel from "@/components/HomeCarousel";
 import Reveal from "@/components/Reveal";
-import { useT } from "@/lib/i18n";
+import { buildSlides, homeCopy } from "@/components/home/homeData";
 import { useLanguage } from "@/lib/i18n";
 
-const homeCopy = {
-  en: {
-    stats: ["Projects delivered", "Avg response time", "Satisfaction"],
-    cards: [
-      {
-        title: "Who it's for",
-        text: "Teams or companies that want structured guidance instead of improvised effort.",
-      },
-      {
-        title: "What you get",
-        text: "Clarity, priorities, a concrete plan, and support focused on delivery.",
-      },
-      {
-        title: "How it works",
-        text: "We talk, analyse your situation, and define a tailored path together.",
-      },
-    ],
-    whyTitle: "Why choose me?",
-    whyText:
-      "Real experience, case studies, a concrete way of working, zero fluff. I focus on taking clients from A to B.",
-    proofTitle: "Mini proof / clear promise",
-    proofText:
-      "If we don't see clear results within a few weeks, I'll say so and we stop—no hard feelings, no wasted time.",
-    strengths: ["Proof over theory", "Decisions over slides", "Rituals that stick"],
-  },
-  de: {
-    stats: ["Abgeschlossene Projekte", "Ø Antwortzeit", "Zufriedenheit"],
-    cards: [
-      {
-        title: "Für wen",
-        text: "Teams oder Firmen, die klare Führung statt Improvisation wollen.",
-      },
-      {
-        title: "Was du bekommst",
-        text: "Klarheit, Prioritäten, einen konkreten Plan und Support mit Fokus auf Delivery.",
-      },
-      {
-        title: "Wie es läuft",
-        text: "Wir sprechen, analysieren deine Situation und definieren gemeinsam den Fahrplan.",
-      },
-    ],
-    whyTitle: "Warum mit mir?",
-    whyText:
-      "Erfahrung, Cases, ein greifbarer Arbeitsstil, kein Blabla. Ziel: gemeinsam von A nach B kommen.",
-    proofTitle: "Proof / klare Zusage",
-    proofText:
-      "Wenn wir nach wenigen Wochen keine klaren Ergebnisse sehen, sage ich es offen und wir stoppen – ohne Zeit zu verlieren.",
-    strengths: ["Proof statt Theorie", "Entscheidungen statt Slides", "Rituale, die bleiben"],
-  },
-};
-
 export default function HomePage() {
-  const t = useT();
   const { lang } = useLanguage();
-  const copy = homeCopy[lang] ?? homeCopy.en;
-  return (
-    <main className="min-h-screen bg-slate-50">
-      {/* HERO */}
-      <section className="relative w-full overflow-hidden pt-32 pb-20 text-center bg-gradient-to-b from-white to-slate-100">
-        <div className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-blue-200/50 blur-3xl" />
-        <div className="pointer-events-none absolute -right-10 top-20 h-48 w-48 rounded-full bg-indigo-200/40 blur-3xl" />
-        <div className="pointer-events-none absolute left-1/2 top-0 h-1 w-[140%] -translate-x-1/2 bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.16),_transparent_45%)] animate-gradient-slide" />
+  const copy = homeCopy[lang] ?? homeCopy.de;
+  const slides = buildSlides(copy);
 
-        <div className="w-full max-w-6xl mx-auto px-6 relative">
+  return (
+    <>
+      {/* ─────────────────────────── HERO ─────────────────────────── */}
+      <section className="relative cinematic-glow overflow-hidden pt-24 pb-20 md:pt-32 md:pb-24">
+        <div className="page-container relative z-10 text-center">
           <Reveal>
-            <p className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
+            <p
+              className="inline-flex items-center gap-3 rounded-full border px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.24em]"
+              style={{
+                borderColor: "var(--rule-strong)",
+                background: "var(--bg-glass)",
+                color: "var(--ink-soft)",
+              }}
+            >
               <span className="pulse-dot" />
-              {t("heroBadge")}
+              {copy.kicker}
             </p>
           </Reveal>
 
           <Reveal delay={80}>
-            <h1 className="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900">
-              {t("heroTitle")}
+            <h1
+              className="mx-auto mt-10 display-serif"
+              style={{
+                color: "var(--ink)",
+                fontSize: "clamp(2.5rem, 6vw, 6.3rem)",
+                maxWidth: "20ch",
+              }}
+            >
+              {copy.heroTitle}
             </h1>
           </Reveal>
 
-          <Reveal delay={140}>
-            <div className="mt-3 text-lg text-slate-600 max-w-2xl mx-auto space-y-2">
-              <p>{t("heroSubtitle")}</p>
-              <p className="text-base text-slate-500">
-                Focus di oggi: <ClaimRotator />
-              </p>
+          <Reveal delay={160}>
+            <p
+              className="mx-auto mt-10 lead-xl"
+              style={{ maxWidth: "62ch" }}
+            >
+              {copy.heroLead}
+            </p>
+          </Reveal>
+
+          <Reveal delay={220}>
+            <p
+              className="mx-auto mt-7 flex flex-wrap items-baseline justify-center gap-x-3 text-[12px] uppercase tracking-[0.24em]"
+              style={{ color: "var(--ink-muted)" }}
+            >
+              {copy.heroFocus}
+              <span
+                className="normal-case tracking-normal text-lg md:text-xl"
+                style={{ color: "var(--accent-strong)" }}
+              >
+                <ClaimRotator />
+              </span>
+            </p>
+          </Reveal>
+
+          <Reveal delay={280}>
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+              <a href="/contact" className="btn-primary">
+                {copy.ctaPrimary} <span aria-hidden>→</span>
+              </a>
+              <a href="/services" className="btn-secondary">
+                {copy.ctaSecondary}
+              </a>
             </div>
           </Reveal>
 
-          <Reveal delay={200}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-              <a
-                href="/contact"
-                className="animated-gradient px-10 py-4 rounded-xl text-white font-semibold text-lg shadow-lg transition hover:shadow-xl hover:-translate-y-0.5"
-              >
-                {t("bookCall")} →
-              </a>
-
-              <a
-                href="/servizi"
-                className="px-10 py-4 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-              >
-                {t("ctaSecondary")}
-              </a>
-            </div>
+          {/* Stats — three-column strip beneath CTAs */}
+          <Reveal delay={340}>
+            <ul
+              className="mx-auto mt-20 grid w-full grid-cols-1 gap-px overflow-hidden rounded-2xl sm:grid-cols-3"
+              style={{
+                background: "var(--rule)",
+                border: "1px solid var(--rule)",
+                maxWidth: "1320px",
+              }}
+            >
+              {copy.stats.map((stat) => (
+                <li
+                  key={stat.label}
+                  className="flex flex-col items-center justify-center gap-3 px-8 py-9"
+                  style={{ background: "var(--bg-elevated)" }}
+                >
+                  <span
+                    className="display-serif tabular text-4xl md:text-5xl lg:text-6xl"
+                    style={{ color: "var(--ink)" }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span
+                    className="text-[12px] uppercase tracking-[0.22em]"
+                    style={{ color: "var(--ink-muted)" }}
+                  >
+                    {stat.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </Reveal>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-3">
-            {[
-              { label: copy.stats[0], value: "120+" },
-              { label: copy.stats[1], value: "24h" },
-              { label: copy.stats[2], value: "4.9/5" },
-            ].map((item, idx) => (
-              <Reveal key={item.label} delay={120 + idx * 80}>
-                <div className="group rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-[0_10px_30px_rgba(15,23,42,0.05)] backdrop-blur-sm transition hover:-translate-y-1 hover:shadow-xl">
-                  <p className="text-sm text-slate-500">{item.label}</p>
-                  <p className="text-2xl font-semibold text-slate-900">{item.value}</p>
-                  <div className="mt-2 h-1 rounded-full bg-slate-100">
-                    <div className="h-full rounded-full bg-blue-600 transition-[width] duration-500 group-hover:w-full w-1/3" />
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
+      {/* ──────────────────── CINEMATIC CAROUSEL ──────────────────── */}
+      <HomeCarousel slides={slides} />
 
-      {/* SEZIONE: PER CHI È */}
-      <section className="max-w-5xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-6">
-        {copy.cards.map((card, idx) => (
-          <Reveal key={card.title} delay={100 + idx * 80}>
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 text-left hover:shadow-lg hover:-translate-y-1 transition">
-              <h2 className="text-lg font-bold text-slate-900 mb-2">
-                {card.title}
+      {/* ─────────────────── WHO / WHAT / HOW ─────────────────── */}
+      <section className="page-container py-28 md:py-36">
+        <Reveal>
+          <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+            <div className="max-w-2xl">
+              <span className="kicker">Engagement</span>
+              <h2
+                className="mt-6 display-serif"
+                style={{
+                  color: "var(--ink)",
+                  fontSize: "clamp(2.4rem, 4.2vw, 4rem)",
+                }}
+              >
+                Three positions, one engineered approach.
               </h2>
-              <p className="text-sm text-slate-600">{card.text}</p>
             </div>
-          </Reveal>
-        ))}
+            <p
+              className="max-w-md"
+              style={{
+                color: "var(--ink-muted)",
+                fontSize: "17px",
+                lineHeight: 1.65,
+              }}
+            >
+              From the audience we serve, through the outcomes you receive, to
+              the method we follow on the site.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="mt-16 grid gap-8 md:grid-cols-3 lg:gap-10">
+          {copy.cards.map((card, idx) => (
+            <Reveal key={card.title} delay={80 + idx * 80}>
+              <article className="card flex h-full flex-col p-9 lg:p-10">
+                <span
+                  className="tabular text-sm font-semibold"
+                  style={{ color: "var(--accent)" }}
+                >
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <h3
+                  className="mt-6 display-serif"
+                  style={{
+                    color: "var(--ink)",
+                    fontSize: "clamp(1.6rem, 1.8vw, 2rem)",
+                  }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  className="mt-5"
+                  style={{
+                    color: "var(--ink-soft)",
+                    fontSize: "16px",
+                    lineHeight: 1.75,
+                  }}
+                >
+                  {card.text}
+                </p>
+                <span
+                  className="mt-auto pt-10 text-[11px] uppercase tracking-[0.22em]"
+                  style={{ color: "var(--ink-muted)" }}
+                >
+                  {copy.slideMetas[idx]}
+                </span>
+              </article>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
-      {/* SEZIONE: PERCHÉ TE */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
+      {/* ────────────────────── WHY / PROOF ────────────────────── */}
+      <section className="page-container pb-36">
+        {/* Header — full-width, calm */}
         <Reveal>
-            <div className="bg-slate-900 text-slate-100 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-center shadow-[0_25px_60px_rgba(15,23,42,0.35)]">
-              <div className="flex-1 space-y-4">
-                <h2 className="text-2xl md:text-3xl font-bold">
-                  {copy.whyTitle}
-                </h2>
-                <p className="text-sm md:text-base text-slate-200">
-                  {copy.whyText}
-                </p>
-                <ul className="text-sm text-slate-200 space-y-1">
-                  {copy.strengths.map((s) => (
-                    <li key={s}>• {s}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex-1 text-sm text-slate-300 border border-slate-700 rounded-2xl p-5 bg-slate-800/60">
-                <p className="mb-3 font-semibold text-slate-100">
-                  {copy.proofTitle}
-                </p>
-                <p>
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <span className="kicker">On the record</span>
+              <h2
+                className="mt-6 display-serif"
+                style={{
+                  color: "var(--ink)",
+                  fontSize: "clamp(2.4rem, 4.2vw, 4rem)",
+                  maxWidth: "18ch",
+                }}
+              >
+                {copy.whyTitle}
+              </h2>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Body + strengths — wide single column for premium reading rhythm */}
+        <div className="mt-14">
+          <Reveal delay={80}>
+            <p className="lead-xl" style={{ maxWidth: "72ch" }}>
+              {copy.whyText}
+            </p>
+          </Reveal>
+
+          <Reveal delay={140}>
+            <ul className="mt-14 grid gap-5 sm:grid-cols-3 lg:gap-7">
+              {copy.strengths.map((s) => (
+                <li
+                  key={s}
+                  className="card p-7 text-[15.5px] leading-[1.7]"
+                  style={{ color: "var(--ink-soft)" }}
+                >
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+
+        {/* What I commit to — full-width band, room for headline + CTAs */}
+        <Reveal delay={200}>
+          <div
+            className="relative mt-16 overflow-hidden rounded-3xl p-10 md:p-14 lg:p-16"
+            style={{
+              border: "1px solid var(--rule-strong)",
+              background:
+                "linear-gradient(135deg, rgba(95,160,230,0.12), rgba(95,160,230,0.02))",
+            }}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full blur-3xl"
+              style={{ background: "var(--accent)", opacity: 0.18 }}
+            />
+            <div className="relative grid items-start gap-10 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-7">
+                <span className="kicker">{copy.proofTitle}</span>
+                <p
+                  className="mt-6 text-[19px] leading-[1.65] md:text-[22px] md:leading-[1.55]"
+                  style={{ color: "var(--ink)", maxWidth: "62ch" }}
+                >
                   {copy.proofText}
                 </p>
               </div>
+              <div className="flex flex-wrap items-start gap-3 lg:col-span-5 lg:justify-end">
+                <a href="/contact" className="btn-primary">
+                  {copy.ctaPrimary} <span aria-hidden>→</span>
+                </a>
+                <a href="/services" className="btn-secondary">
+                  {copy.ctaSecondary}
+                </a>
+              </div>
             </div>
+          </div>
         </Reveal>
       </section>
-    </main>
+    </>
   );
 }

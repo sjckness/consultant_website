@@ -1,19 +1,19 @@
-import Image from "next/image"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { groq } from "next-sanity"
-import { PortableText, type PortableTextComponents } from "@portabletext/react"
-import { client } from "@/sanity/client"
-import { urlFor } from "@/sanity/image"
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { groq } from "next-sanity";
+import { PortableText, type PortableTextComponents } from "@portabletext/react";
+import { client } from "@/sanity/client";
+import { urlFor } from "@/sanity/image";
+import { BlogBackLink, BlogPublishedDate } from "@/components/BlogPostMeta";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 type Post = {
-  title: string
-  publishedAt?: string
-  coverImage?: any
-  content: any[]
-}
+  title: string;
+  publishedAt?: string;
+  coverImage?: any;
+  content: any[];
+};
 
 const POST_QUERY = groq`
   *[_type=="post" && slug.current==$slug][0]{
@@ -22,122 +22,217 @@ const POST_QUERY = groq`
     coverImage,
     content
   }
-`
-
-function formatDate(iso?: string) {
-  if (!iso) return ""
-  const d = new Date(iso)
-  return new Intl.DateTimeFormat("en-US", { day: "2-digit", month: "long", year: "numeric" }).format(d)
-}
+`;
 
 const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
-      const src = urlFor(value).width(1600).auto("format").url()
+      const src = urlFor(value).width(2000).auto("format").url();
       return (
-        <figure className="my-8">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
+        <figure className="my-14">
+          <div
+            className="relative aspect-[16/9] overflow-hidden rounded-2xl"
+            style={{ border: "1px solid var(--rule)" }}
+          >
             <Image
               src={src}
               alt={value?.alt || "Image"}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 900px"
+              sizes="(max-width: 1024px) 100vw, 1200px"
             />
           </div>
           {value?.caption ? (
-            <figcaption className="mt-2 text-center text-sm text-neutral-500">{value.caption}</figcaption>
+            <figcaption
+              className="mt-4 text-center text-[14px]"
+              style={{ color: "var(--ink-muted)" }}
+            >
+              {value.caption}
+            </figcaption>
           ) : null}
         </figure>
-      )
+      );
     },
   },
   block: {
     h2: ({ children }) => (
-      <h2 className="mt-10 scroll-mt-24 text-2xl font-semibold tracking-tight text-neutral-900">{children}</h2>
+      <h2
+        className="mt-16 scroll-mt-24 display-serif"
+        style={{
+          color: "var(--ink)",
+          fontSize: "clamp(1.9rem, 2.6vw, 2.6rem)",
+        }}
+      >
+        {children}
+      </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="mt-8 scroll-mt-24 text-xl font-semibold tracking-tight text-neutral-900">{children}</h3>
+      <h3
+        className="mt-12 scroll-mt-24 text-[24px] font-semibold tracking-tight md:text-[26px]"
+        style={{ color: "var(--ink)" }}
+      >
+        {children}
+      </h3>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="my-8 border-l-4 border-neutral-900/10 pl-5 text-neutral-700">{children}</blockquote>
+      <blockquote
+        className="my-12 pl-7 text-[20px] italic leading-[1.65]"
+        style={{
+          borderLeft: "2px solid var(--accent)",
+          color: "var(--ink-soft)",
+        }}
+      >
+        {children}
+      </blockquote>
     ),
-    normal: ({ children }) => <p className="my-5 leading-7 text-neutral-700">{children}</p>,
+    normal: ({ children }) => (
+      <p
+        className="my-7"
+        style={{
+          color: "var(--ink-soft)",
+          fontSize: "18.5px",
+          lineHeight: 1.75,
+        }}
+      >
+        {children}
+      </p>
+    ),
   },
   marks: {
     link: ({ children, value }) => {
-      const href = value?.href as string
-      const isExternal = href?.startsWith("http")
+      const href = value?.href as string;
+      const isExternal = href?.startsWith("http");
       return (
         <a
           href={href}
-          className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-600"
+          className="underline underline-offset-4 transition"
+          style={{
+            color: "var(--accent-strong)",
+            textDecorationColor: "var(--accent-deep)",
+          }}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noreferrer" : undefined}
         >
           {children}
         </a>
-      )
+      );
     },
   },
   list: {
-    bullet: ({ children }) => <ul className="my-6 list-disc space-y-2 pl-6 text-neutral-700">{children}</ul>,
-    number: ({ children }) => <ol className="my-6 list-decimal space-y-2 pl-6 text-neutral-700">{children}</ol>,
+    bullet: ({ children }) => (
+      <ul
+        className="my-8 list-disc space-y-3 pl-7"
+        style={{
+          color: "var(--ink-soft)",
+          fontSize: "18.5px",
+          lineHeight: 1.75,
+        }}
+      >
+        {children}
+      </ul>
+    ),
+    number: ({ children }) => (
+      <ol
+        className="my-8 list-decimal space-y-3 pl-7"
+        style={{
+          color: "var(--ink-soft)",
+          fontSize: "18.5px",
+          lineHeight: 1.75,
+        }}
+      >
+        {children}
+      </ol>
+    ),
   },
   listItem: {
-    bullet: ({ children }) => <li className="leading-7">{children}</li>,
-    number: ({ children }) => <li className="leading-7">{children}</li>,
+    bullet: ({ children }) => <li>{children}</li>,
+    number: ({ children }) => <li>{children}</li>,
   },
-}
+};
 
 export default async function PostPage(props: {
-  params: Promise<{ slug?: string }> | { slug?: string }
+  params: Promise<{ slug?: string }> | { slug?: string };
 }) {
-  const { slug } = await Promise.resolve(props.params)
-  if (!slug) return notFound()
+  const { slug } = await Promise.resolve(props.params);
+  if (!slug) return notFound();
 
-  const post: Post | null = await client.fetch(POST_QUERY, { slug })
-  if (!post) return notFound()
+  const post: Post | null = await client.fetch(POST_QUERY, { slug });
+  if (!post) return notFound();
 
-  const cover =
-    post.coverImage ? urlFor(post.coverImage).width(2000).height(1200).fit("crop").auto("format").url() : null
+  const cover = post.coverImage
+    ? urlFor(post.coverImage).width(2600).height(1400).fit("crop").auto("format").url()
+    : null;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      {/* Breadcrumb */}
-      <div className="mb-6">
-        <Link href="/blog" className="text-sm text-neutral-600 hover:text-neutral-900">
-          ← Back to blog
-        </Link>
+    <article
+      className="mx-auto pt-16 pb-32"
+      style={{
+        width: "100%",
+        maxWidth: "1180px",
+        paddingInline: "clamp(1.5rem, 3vw, 4rem)",
+      }}
+    >
+      <div className="mb-10">
+        <BlogBackLink />
       </div>
 
-      {/* Cover */}
       {cover ? (
-        <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-100">
+        <div
+          className="relative mb-14 aspect-[16/9] overflow-hidden rounded-3xl"
+          style={{
+            border: "1px solid var(--rule)",
+            background: "var(--bg-deep)",
+          }}
+        >
           <Image
             src={cover}
             alt={post.title}
             fill
             className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 768px"
+            sizes="(max-width: 1280px) 100vw, 1180px"
             priority
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(13,14,16,0) 60%, rgba(13,14,16,0.55) 100%)",
+            }}
           />
         </div>
       ) : null}
 
-      {/* Title */}
-      <header className="mb-8">
-        <p className="text-sm text-neutral-500">
-          {post.publishedAt ? <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time> : "—"}
+      {/* Header — wide */}
+      <header className="mb-14" style={{ maxWidth: "1000px" }}>
+        <p
+          className="text-[11px] uppercase tracking-[0.22em]"
+          style={{ color: "var(--ink-muted)" }}
+        >
+          <BlogPublishedDate iso={post.publishedAt} />
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">{post.title}</h1>
-        <div className="mt-5 h-px w-full bg-neutral-200" />
+        <h1
+          className="mt-5 display-serif"
+          style={{
+            color: "var(--ink)",
+            fontSize: "clamp(2rem, 3.8vw, 3.65rem)",
+          }}
+        >
+          {post.title}
+        </h1>
+        <div
+          className="mt-10 h-px w-full"
+          style={{ background: "var(--rule)" }}
+        />
       </header>
 
-      {/* Content */}
-      <article className="prose prose-neutral max-w-none">
-        <PortableText value={post.content || []} components={portableTextComponents} />
-      </article>
-    </main>
-  )
+      {/* Body — generous reading column without feeling cramped */}
+      <div style={{ maxWidth: "820px" }}>
+        <PortableText
+          value={post.content || []}
+          components={portableTextComponents}
+        />
+      </div>
+    </article>
+  );
 }
