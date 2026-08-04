@@ -175,11 +175,10 @@ export default function Footer() {
             </span>
             <Link
               href="/admin"
-              aria-label="Admin"
-              className="text-[10px]"
-              style={{ color: "var(--ink-faint)" }}
+              className="inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] transition-colors hover:text-[var(--accent-strong)] hover:border-[var(--accent)]"
+              style={{ borderColor: "var(--rule)", color: "var(--ink-soft)" }}
             >
-              ·
+              Admin
             </Link>
           </span>
         </div>

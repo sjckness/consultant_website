@@ -13,7 +13,22 @@ model ContactRequest {
   email     String
   message   String
   createdAt DateTime @default(now())
-  ip        String? 
+  ip        String?
   userAgent String?
   status    String   @default("new")
+  clients   Client[]
+}
+
+model Client {
+  id              String          @id @default(cuid())
+  name            String
+  email           String
+  phone           String?
+  company         String?
+  notes           String?
+  status          String          @default("lead")
+  sourceMessageId String?
+  sourceMessage   ContactRequest? @relation(fields: [sourceMessageId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
 }

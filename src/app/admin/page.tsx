@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import AdminDashboard from "./AdminDashboard";
+import { inputStyle } from "./types";
 
 export const dynamic = "force-dynamic";
 
@@ -46,12 +48,6 @@ export default async function AdminPage({
   const store = await cookies();
   const authed = store.get(COOKIE)?.value === process.env.ADMIN_PASSWORD;
 
-  const inputStyle: React.CSSProperties = {
-    background: "var(--bg-deep)",
-    border: "1px solid var(--rule)",
-    color: "var(--ink)",
-  };
-
   if (!authed) {
     return (
       <section className="page-container flex min-h-[70vh] items-center justify-center py-24">
@@ -93,97 +89,32 @@ export default async function AdminPage({
     );
   }
 
-  const submissions = await prisma.contactRequest.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const [submissions, clients] = await Promise.all([
+    prisma.contactRequest.findMany({ orderBy: { createdAt: "desc" } }),
+    prisma.client.findMany({ orderBy: { updatedAt: "desc" } }),
+  ]);
 
   return (
-    <section className="page-container py-24">
-      <div className="flex items-end justify-between gap-6">
-        <div>
-          <span className="kicker">Admin</span>
-          <h1
-            className="mt-4 display-serif"
-            style={{ fontSize: "clamp(2rem, 3vw, 2.8rem)" }}
-          >
-            Contact submissions
-          </h1>
-          <p className="mt-2 text-sm" style={{ color: "var(--ink-muted)" }}>
-            {submissions.length}{" "}
-            {submissions.length === 1 ? "submission" : "submissions"}
-          </p>
-        </div>
-        <form action={logout}>
-          <button type="submit" className="btn-secondary">
-            Sign out
-          </button>
-        </form>
-      </div>
-
-      <div
-        className="mt-10 overflow-x-auto rounded-2xl"
-        style={{ border: "1px solid var(--rule)" }}
-      >
-        <table className="w-full border-collapse text-left text-sm">
-          <thead>
-            <tr style={{ background: "var(--bg-deep)" }}>
-              {["Name", "Email", "Message", "Date"].map((h) => (
-                <th
-                  key={h}
-                  className="px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.18em]"
-                  style={{ color: "var(--ink-muted)" }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {submissions.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={4}
-                  className="px-5 py-10 text-center"
-                  style={{ color: "var(--ink-muted)" }}
-                >
-                  No submissions yet.
-                </td>
-              </tr>
-            ) : (
-              submissions.map((s) => (
-                <tr key={s.id} style={{ borderTop: "1px solid var(--rule)" }}>
-                  <td
-                    className="px-5 py-4 align-top font-medium"
-                    style={{ color: "var(--ink)" }}
-                  >
-                    {s.name}
-                  </td>
-                  <td className="px-5 py-4 align-top">
-                    <a
-                      href={`mailto:${s.email}`}
-                      style={{ color: "var(--accent-strong)" }}
-                    >
-                      {s.email}
-                    </a>
-                  </td>
-                  <td
-                    className="max-w-md px-5 py-4 align-top whitespace-pre-wrap"
-                    style={{ color: "var(--ink-soft)" }}
-                  >
-                    {s.message}
-                  </td>
-                  <td
-                    className="px-5 py-4 align-top whitespace-nowrap tabular"
-                    style={{ color: "var(--ink-muted)" }}
-                  >
-                    {formatDate(s.createdAt)}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <AdminDashboard
+      logout={logout}
+      messages={submissions.map((s) => ({
+        id: s.id,
+        name: s.name,
+        email: s.email,
+        message: s.message,
+        createdAt: formatDate(s.createdAt),
+      }))}
+      clients={clients.map((c) => ({
+        id: c.id,
+        name: c.name,
+        email: c.email,
+        phone: c.phone ?? "",
+        company: c.company ?? "",
+        notes: c.notes ?? "",
+        status: c.status,
+        createdAt: formatDate(c.createdAt),
+        updatedAt: formatDate(c.updatedAt),
+      }))}
+    />
   );
 }
