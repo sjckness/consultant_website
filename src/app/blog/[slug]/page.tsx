@@ -6,7 +6,12 @@ import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import { BlogBackLink, BlogPublishedDate } from "@/components/BlogPostMeta";
 
-export const dynamic = "force-dynamic";
+export async function generateStaticParams() {
+  const slugs: string[] = await client.fetch(
+    groq`*[_type=="post" && defined(slug.current)].slug.current`
+  );
+  return slugs.map((slug) => ({ slug }));
+}
 
 type Post = {
   title: string;

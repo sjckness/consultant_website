@@ -4,8 +4,6 @@ import BlogHero from "@/components/BlogHero";
 import BlogPlaceholders from "@/components/BlogPlaceholders";
 import BlogList, { type PostCard } from "@/components/BlogList";
 
-export const dynamic = "force-dynamic";
-
 const POSTS_QUERY = groq`
   *[_type=="post" && defined(slug.current)] | order(publishedAt desc) {
     _id,

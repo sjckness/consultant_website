@@ -115,13 +115,11 @@ export const slideImages: { image: string; alt: string }[] = [
     alt: "Swiss infrastructure — engineering on site",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=2400&q=85",
+    image: "/hero-bridge.jpg",
     alt: "Modern cable-stayed bridge — engineered infrastructure",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=2400&q=85",
+    image: "/hero-rail.jpg",
     alt: "Railway tracks converging — precision and direction",
   },
 ];

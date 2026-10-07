@@ -87,9 +87,9 @@ export default function ContactPage() {
     setLoading(true);
     setFeedback("");
 
-    const res = await fetch("/api/contact", {
+    const res = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(form),
     });
 
@@ -97,7 +97,8 @@ export default function ContactPage() {
     setLoading(false);
 
     if (!res.ok) {
-      setFeedback(data.error || "Error while sending.");
+      const msg = data?.errors?.[0]?.message ?? "Error while sending.";
+      setFeedback(msg);
     } else {
       setFeedback(t.success);
       setForm({ name: "", email: "", message: "" });

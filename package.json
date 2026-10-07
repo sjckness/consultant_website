@@ -11,15 +11,12 @@
   },
   "dependencies": {
     "@portabletext/react": "^6.0.2",
-    "@prisma/client": "^6.19.2",
     "@sanity/client": "^7.16.0",
     "@sanity/image-url": "^2.0.3",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.553.0",
     "next": "^16.1.6",
     "next-sanity": "^12.1.0",
-    "nodemailer": "^7.0.13",
-    "prisma": "^6.19.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "zod": "^4.3.6"
@@ -28,7 +25,6 @@
     "@biomejs/biome": "2.2.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/nodemailer": "^8.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
