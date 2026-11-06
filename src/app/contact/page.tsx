@@ -12,6 +12,9 @@ import {
 import Reveal from "@/components/Reveal";
 import { useLanguage } from "@/lib/i18n";
 
+// Set to true once a real Formspree ID is set in handleSubmit below.
+const FORM_ENABLED = false;
+
 const copy = {
   en: {
     badge: "Contact",
@@ -31,6 +34,8 @@ const copy = {
     },
     formTitle: "Send a message",
     formSub: "Reach me directly — I read every message.",
+    formUnavailable:
+      "The contact form will be available soon. For now, please reach me by email.",
     submit: "Send message",
     submitting: "Sending…",
     success: "Message sent — I'll reply as soon as possible.",
@@ -59,6 +64,8 @@ const copy = {
     },
     formTitle: "Nachricht senden",
     formSub: "Direkt an mich – ich lese jede Anfrage.",
+    formUnavailable:
+      "Das Kontaktformular folgt in Kürze. Bitte schreiben Sie mir vorerst per E-Mail.",
     submit: "Nachricht senden",
     submitting: "Wird gesendet…",
     success: "Nachricht gesendet – ich melde mich so rasch wie möglich.",
@@ -87,7 +94,7 @@ export default function ContactPage() {
     setLoading(true);
     setFeedback("");
 
-    const res = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+    const res = await fetch("https://formspree.io/f/abcdwxyz", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(form),
@@ -230,6 +237,7 @@ export default function ContactPage() {
 
           {/* RIGHT — form */}
           <Reveal delay={120} className="lg:col-span-7">
+            {FORM_ENABLED ? (
             <form
               onSubmit={handleSubmit}
               className="rounded-3xl p-10 md:p-12"
@@ -306,6 +314,34 @@ export default function ContactPage() {
                 </p>
               </div>
             </form>
+            ) : (
+              <div
+                className="rounded-3xl p-10 md:p-12"
+                style={{
+                  border: "1px solid var(--rule-strong)",
+                  background: "var(--bg-elevated)",
+                  boxShadow: "0 30px 80px rgba(0,0,0,0.4)",
+                }}
+              >
+                <span className="kicker">{t.formTitle}</span>
+                <p
+                  className="mt-5"
+                  style={{
+                    color: "var(--ink-muted)",
+                    fontSize: "15px",
+                    lineHeight: 1.65,
+                  }}
+                >
+                  {t.formUnavailable}
+                </p>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="btn-primary mt-10 inline-flex"
+                >
+                  {CONTACT_EMAIL} <span aria-hidden>→</span>
+                </a>
+              </div>
+            )}
           </Reveal>
         </div>
       </section>

@@ -3,14 +3,22 @@ import { notFound } from "next/navigation";
 import { groq } from "next-sanity";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { client } from "@/sanity/client";
+import { HIDDEN_POST_SLUGS } from "@/sanity/hidden";
 import { urlFor } from "@/sanity/image";
 import { BlogBackLink, BlogPublishedDate } from "@/components/BlogPostMeta";
 
+// Static export needs at least one path. While the CMS has no posts we emit a
+// dummy slug; PostPage finds no post for it and renders the 404 page.
+const EMPTY_SLUG = "_none";
+
 export async function generateStaticParams() {
-  const slugs: string[] = await client.fetch(
+  const all: string[] = await client.fetch(
     groq`*[_type=="post" && defined(slug.current)].slug.current`
   );
-  return slugs.map((slug) => ({ slug }));
+  const slugs = all.filter((slug) => !HIDDEN_POST_SLUGS.includes(slug));
+  return slugs.length > 0
+    ? slugs.map((slug) => ({ slug }))
+    : [{ slug: EMPTY_SLUG }];
 }
 
 type Post = {

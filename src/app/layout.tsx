@@ -3,6 +3,7 @@ import { Geist, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Background from "@/components/Background";
+import ComingSoonGate from "@/components/ComingSoonGate";
 import TextOverrides from "@/components/TextOverrides";
 import { LanguageProvider } from "@/lib/i18n";
 
@@ -37,14 +38,16 @@ export default function RootLayout({
     >
       <body className="relative min-h-screen flex flex-col antialiased">
         <LanguageProvider>
-          <Background />
           <TextOverrides />
+          <ComingSoonGate>
+            <Background />
 
-          <Navbar />
+            <Navbar />
 
-          <main className="relative z-10 w-full min-h-screen">{children}</main>
+            <main className="relative z-10 w-full min-h-screen">{children}</main>
 
-          <Footer />
+            <Footer />
+          </ComingSoonGate>
         </LanguageProvider>
       </body>
     </html>
