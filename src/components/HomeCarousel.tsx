@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEditorFrame } from "@/lib/editorFrame";
 
 export type CarouselSlide = {
   title: string;
@@ -21,15 +22,16 @@ export default function HomeCarousel({
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const inEditor = useEditorFrame();
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || inEditor) return;
     const id = setInterval(
       () => setIndex((i) => (i + 1) % slides.length),
       interval,
     );
     return () => clearInterval(id);
-  }, [paused, slides.length, interval]);
+  }, [paused, inEditor, slides.length, interval]);
 
   const go = (next: number) => setIndex((next + slides.length) % slides.length);
 

@@ -3,6 +3,7 @@ import { Geist, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Background from "@/components/Background";
+import TextOverrides from "@/components/TextOverrides";
 import { LanguageProvider } from "@/lib/i18n";
 
 const geist = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body className="relative min-h-screen flex flex-col antialiased">
         <LanguageProvider>
           <Background />
+          <TextOverrides />
 
           <Navbar />
 

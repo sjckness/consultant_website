@@ -44,3 +44,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editor testi: password e dati runtime (non vanno nel repo né sovrascritti al deploy)
+/public/api/config.php
+/public/api/data/
